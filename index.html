@@ -1,84 +1,25 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Agente Vapi en GitHub Pages</title>
-    <!-- Cargar el SDK de Vapi desde CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/vapi.min.js"></script>
-    <script>
-        let vapiInstance = null;
+<script>
+  var vapiInstance = null;
+  const assistant = "680b050a-e8b3-4321-9bad-94c7bc886a28"; // Substitute with your assistant ID
+  const apiKey = "2bfd5f2a-c8f3-417e-82b4-b225876a2163"; // Substitute with your Public key from Vapi Dashboard.
+  const buttonConfig = {}; // Modify this as required
 
-        async function startCall() {
-            try {
-                const publicKey = "2bfd5f2a-c8f3-417e-82b4-b225876a2163";
-                const assistantId = "680b050a-e8b3-4321-9bad-94c7bc886a28";
+  (function (d, t) {
+    var g = document.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    g.src =
+      "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+    g.defer = true;
+    g.async = true;
+    s.parentNode.insertBefore(g, s);
 
-                // Crear una instancia de Vapi directamente desde el objeto global
-                vapiInstance = new Vapi(publicKey);
-                
-                // Iniciar la llamada
-                const call = await vapiInstance.start(assistantId);
-                alert("¡Llamada iniciada! Ahora puedes hablar con el asistente.");
+    g.onload = function () {
+      vapiInstance = window.vapiSDK.run({
+        apiKey: apiKey, // mandatory
+        assistant: assistant, // mandatory
+        config: buttonConfig, // optional
+      });
+    };
+  })(document, "script");
 
-                // Eventos del agente
-                vapiInstance.on("call-start", () => {
-                    console.log("La llamada ha comenzado.");
-                });
-
-                vapiInstance.on("call-end", () => {
-                    console.log("La llamada ha terminado.");
-                    alert("La llamada ha finalizado.");
-                });
-
-                vapiInstance.on("speech-start", () => {
-                    console.log("El asistente está hablando.");
-                });
-
-                vapiInstance.on("speech-end", () => {
-                    console.log("El asistente ha terminado de hablar.");
-                });
-
-                vapiInstance.on("error", (e) => {
-                    console.error("Error en la llamada:", e);
-                    alert("Hubo un problema durante la llamada.");
-                });
-
-            } catch (error) {
-                alert("Error al iniciar la llamada.");
-                console.error(error);
-            }
-        }
-    </script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
-        }
-
-        #start-call {
-            padding: 15px 30px;
-            font-size: 18px;
-            background-color: #000;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-
-        #start-call:hover {
-            background-color: #333;
-        }
-
-        h1 {
-            font-size: 28px;
-            color: #333;
-        }
-    </style>
-</head>
-<body>
-    <h1>Habla con nuestro asistente virtual de ICAMI</h1>
-    <button id="start-call" onclick="startCall()">Iniciar Conversación</button>
-</body>
-</html>
+</script>
