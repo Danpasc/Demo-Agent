@@ -3,42 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>Agente Vapi en GitHub Pages</title>
-    <script type="module">
-        import Vapi from "https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest";
-
+    <script>
         let vapiInstance = null;
 
         async function startCall() {
             try {
-                const publicKey = "2bfd5f2a-c8f3-417e-82b4-b225876a2163";  // Tu clave pública
-                const assistantId = "680b050a-e8b3-4321-9bad-94c7bc886a28";  // ID del asistente ICAMI
+                const publicKey = "2bfd5f2a-c8f3-417e-82b4-b225876a2163";
+                const assistantId = "680b050a-e8b3-4321-9bad-94c7bc886a28";
 
-                vapiInstance = new Vapi(publicKey);
-                const call = await vapiInstance.start(assistantId);
-                alert("¡Llamada iniciada! Ahora puedes hablar con el asistente.");
+                // Cargar el script de Vapi manualmente
+                const script = document.createElement('script');
+                script.src = "https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest";
+                script.type = "module";
+                document.head.appendChild(script);
 
-                // Eventos del asistente
-                vapiInstance.on("call-start", () => {
-                    console.log("La llamada ha comenzado.");
-                });
+                script.onload = async () => {
+                    try {
+                        const { default: Vapi } = await import("https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest");
+                        vapiInstance = new Vapi(publicKey);
+                        const call = await vapiInstance.start(assistantId);
+                        alert("¡Llamada iniciada! Ahora puedes hablar con el asistente.");
+                    } catch (innerError) {
+                        alert("Error al iniciar la llamada.");
+                        console.error(innerError);
+                    }
+                };
 
-                vapiInstance.on("call-end", () => {
-                    console.log("La llamada ha terminado.");
-                    alert("La llamada ha finalizado.");
-                });
-
-                vapiInstance.on("speech-start", () => {
-                    console.log("El asistente está hablando.");
-                });
-
-                vapiInstance.on("speech-end", () => {
-                    console.log("El asistente ha terminado de hablar.");
-                });
-
-                vapiInstance.on("error", (e) => {
-                    console.error("Error en la llamada:", e);
-                    alert("Hubo un problema durante la llamada.");
-                });
+                script.onerror = () => {
+                    alert("Error al cargar el SDK de Vapi.");
+                };
 
             } catch (error) {
                 alert("Error al iniciar la llamada.");
