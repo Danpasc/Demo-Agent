@@ -10,21 +10,57 @@
 
         async function startCall() {
             try {
-                const publicKey = "2bfd5f2a-c8f3-417e-82b4-b225876a2163";  // Reemplaza con tu clave pública
-                const assistantId = "680b050a-e8b3-4321-9bad-94c7bc886a28";  // Reemplaza con el ID de tu asistente
+                const publicKey = "TU_PUBLIC_KEY";  // Reemplaza con tu clave pública
+                const assistantId = "TU_ASSISTANT_ID";  // Reemplaza con el ID de tu asistente
 
                 vapiInstance = new Vapi(publicKey);
 
                 const call = await vapiInstance.start(assistantId);
                 alert("¡Llamada iniciada! Ahora puedes hablar con el asistente.");
+                
+                vapiInstance.on("call-start", () => {
+                    console.log("La llamada ha comenzado.");
+                });
+
+                vapiInstance.on("call-end", () => {
+                    console.log("La llamada ha terminado.");
+                });
+
+                vapiInstance.on("speech-start", () => {
+                    console.log("El asistente está hablando.");
+                });
+
+                vapiInstance.on("speech-end", () => {
+                    console.log("El asistente ha terminado de hablar.");
+                });
+
             } catch (error) {
-                alert("Error al iniciar la llamada.");
-                console.error(error);
+                console.error("Error al iniciar la llamada:", error);
+                alert("Hubo un problema al iniciar la llamada.");
             }
         }
     </script>
+    <style>
+        #start-call {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #start-call:hover {
+            background-color: #333;
+        }
+    </style>
 </head>
 <body>
+    <h1>Habla con nuestro asistente virtual</h1>
+    <button id="start-call" onclick="startCall()">Iniciar Conversación</button>
+</body>
+</html>
     <h1>Habla con nuestro asistente virtual</h1>
     <button onclick="startCall()">Iniciar Conversación</button>
 </body>
